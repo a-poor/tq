@@ -12,6 +12,7 @@ func makeApp() *cli.App {
     Name: "tq",
     Usage: "",
     Version: "0.0.1",
+    HideHelpCommand: true,
     Flags: []cli.Flag{
       &cli.StringFlag{
         Name: "input-file",
@@ -22,7 +23,7 @@ func makeApp() *cli.App {
         Name: "input-type",
         Usage: "input file type (infer from file extension if not specified)",
         Action: func(c *cli.Context, v string) error {
-          validTypes := []string{"json", "csv", "xlsx"}
+          validTypes := []string{"json-stream", "json-array", "csv", "xlsx"}
           if !slices.Contains(validTypes, v) {
             return fmt.Errorf("invalid input type: %s", v)
           }
@@ -33,6 +34,10 @@ func makeApp() *cli.App {
         Name: "input-sheet",
         Usage: "input sheet name (if applicable)",
       },
+      &cli.BoolFlag{
+        Name: "header",
+        Usage: "input file has a header row",
+      },
       &cli.StringFlag{
         Name: "output-file",
         Aliases: []string{"o"},
@@ -42,7 +47,7 @@ func makeApp() *cli.App {
         Name: "output-type",
         Usage: "output file type (infer from file extension if not specified)",
         Action: func(c *cli.Context, v string) error {
-          validTypes := []string{"json", "csv", "xlsx"}
+          validTypes := []string{"json-stream", "json-array", "csv", "xlsx"}
           if !slices.Contains(validTypes, v) {
             return fmt.Errorf("invalid output type: %s", v)
           }
